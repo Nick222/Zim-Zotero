@@ -912,6 +912,19 @@ MATERIAL_TYPES = {
         ],
     },
 
+    'journalArticle': {
+        'label': 'Статья',
+        'type_code': 'СТ',
+        'creator_types': ['author'],
+        'level3_label': 'Том:',
+        'level4_label': 'Страница:',
+        'level4_kind': 'number',
+        'source_fields': [
+            ('journal', 'Журнал:', 'publicationTitle'),
+            ('issue', 'Номер выпуска:', 'issue'),
+        ],
+    },
+
 }
 
 SORTABLE_INDEX_FIELDS = [
@@ -4484,7 +4497,7 @@ class ZoteroMainWindowExtension(MainWindowExtension):
         else:
 
             place_lines.append(
-                f'Страница: {level4_id}'
+                f'Страница: {level4_raw}'
             )
 
         place_block = '\n\n'.join(
