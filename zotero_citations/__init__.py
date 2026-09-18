@@ -925,6 +925,30 @@ MATERIAL_TYPES = {
         ],
     },
 
+    'encyclopediaArticle': {
+        'label': 'Энциклопедическая статья',
+        'type_code': 'ЭС',
+        'creator_types': ['author'],
+        'level3_label': None,
+        'level4_label': None,
+        'level4_kind': 'number',
+        'source_fields': [
+            ('encyclopedia', 'Энциклопедия:', 'encyclopediaTitle'),
+        ],
+    },
+
+    'blogPost': {
+        'label': 'Запись в блоге',
+        'type_code': 'БЛ',
+        'creator_types': ['author'],
+        'level3_label': None,
+        'level4_label': None,
+        'level4_kind': 'number',
+        'source_fields': [
+            ('blog', 'Сайт:', 'blogTitle'),
+        ],
+    },
+
 }
 
 SORTABLE_INDEX_FIELDS = [
@@ -4094,15 +4118,18 @@ class ZoteroMainWindowExtension(MainWindowExtension):
         if config['level3_label']:
             level3_entry = add_entry(config['level3_label'], '')
 
-        if item_type == 'webpage':
-            level4_initial = '1'
-        else:
-            level4_initial = ''
+        level4_entry = None
 
-        level4_entry = add_entry(
-            config['level4_label'],
-            level4_initial,
-        )
+        if config['level4_label']:
+            if item_type == 'webpage':
+                level4_initial = '1'
+            else:
+                level4_initial = ''
+
+            level4_entry = add_entry(
+                config['level4_label'],
+                level4_initial,
+            )
 
         # ---------------------------------------------------------
         # Место — произвольное количество уровней
@@ -4305,7 +4332,11 @@ class ZoteroMainWindowExtension(MainWindowExtension):
             else ''
         )
 
-        level4_raw = level4_entry.get_text().strip()
+        level4_raw = (
+            level4_entry.get_text().strip()
+            if level4_entry is not None
+            else ''
+        )
 
         place_values = [
             entry.get_text().strip()
@@ -4333,12 +4364,18 @@ class ZoteroMainWindowExtension(MainWindowExtension):
         # Проверяем обязательные поля
         # ---------------------------------------------------------
 
-        if not prefix or not level4_raw:
-
+        if not prefix or (
+            config['level4_label']
+            and not level4_raw
+        ):
             self._show_error(
                 'Необходимо заполнить:\n'
-                '• Префикс ID\n'
-                f"• {config['level4_label']}"
+                '• Префикс ID'
+                + (
+                    f"\n• {config['level4_label']}"
+                    if config['level4_label']
+                    else ''
+                )
             )
 
             return
