@@ -308,7 +308,7 @@ class ZoteroFragmentsPlugin(PluginClass):
     plugin_info = {
         'name': 'Zotero Fragments',
         'description': 'Work with Material and Fragment records from Zotero.',
-        'author': 'Nikolay',
+        'author': 'Nick',
     }
 
     plugin_preferences = (

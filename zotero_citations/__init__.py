@@ -2262,7 +2262,7 @@ class ZoteroCitationsPlugin(PluginClass):
     plugin_info = {
         'name': 'Zotero Citations',
         'description': 'Integration between Zim and Zotero for citations.',
-        'author': 'Nikolay',
+        'author': 'Nick',
     }
 
 class ZoteroMainWindowExtension(MainWindowExtension):
